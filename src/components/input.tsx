@@ -9,10 +9,9 @@ interface InputState {
   onTextChange: any
 }
 
-export default class RsInput extends React.Component<InputProps, InputState> {
+class RsInput extends React.Component<InputProps, InputState> {
     constructor(props: InputProps) {
         super(props);
-        // this.onTextChange = this.onTextChange.bind(this);
         this.state = { value: '', onTextChange: () => this.onTextChange };
     }
 
@@ -29,3 +28,5 @@ export default class RsInput extends React.Component<InputProps, InputState> {
     );
   }
 }
+
+export default RsInput;
