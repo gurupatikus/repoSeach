@@ -1,5 +1,10 @@
 import axiosClient from "./axiosClient";
 
+export interface Repos {
+    items: Repo[];
+    pageCount: number;
+}
+
 export interface Repo {
     id: number;
     name: string;
@@ -13,17 +18,25 @@ export interface Repo {
     };
   }
 
-  interface RepoResponse {
+interface RepoResponse {
     items: Repo[];
-  }
+    total_count: number;
+}
 
 class GitRepoClient {
     readonly _githubBaseUrl: string = 'https://api.github.com';
+    readonly perPage = 10;
+    readonly maxPageCount = 1000 / this.perPage;
 
-    public async getReposAsync(repoName: string): Promise<Repo[]> {
-        return axiosClient.get(`${this._githubBaseUrl}/search/repositories?q=${repoName}`).then((response) => {
+    public async getReposAsync(repoName: string, page = 1): Promise<Repos> {
+        return axiosClient.get(`${this._githubBaseUrl}/search/repositories?q=${repoName}&page=${page}&per_page=${this.perPage}`).then((response) => {
             const data: RepoResponse = response.data;
-            return data.items.map<Repo>((repo) => {
+            let pageCount = data.total_count / this.perPage;
+            if (pageCount > this.maxPageCount) {
+                pageCount = this.maxPageCount;
+            }
+            let repos: Repos = { items: [], pageCount: pageCount };
+            repos.items = data.items.map<Repo>((repo) => {
                 return {
                     id: repo.id,
                     name: repo.name,
@@ -37,6 +50,7 @@ class GitRepoClient {
                     }
                 }
             });
+            return repos;
         });
     }
 }
