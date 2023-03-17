@@ -23,7 +23,7 @@ class RsInput extends React.Component<InputProps, InputState> {
   render() {
     return (
       <form>
-        <input type="text" value={this.state.value} onChange={this.onTextChange} />
+        <input type="search" name="repo_search" value={this.state.value} onChange={this.onTextChange} />
       </form>
     );
   }

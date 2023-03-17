@@ -6,6 +6,7 @@ export interface Repo {
     description: string;
     html_url: string;
     language: string;
+    stargazers_count: number;
     owner: {
         login: string;
         html_url: string;
@@ -29,6 +30,7 @@ class GitRepoClient {
                     description: repo.description,
                     html_url: repo.html_url,
                     language: repo.language,
+                    stargazers_count: repo.stargazers_count,
                     owner: {
                         login: repo.owner.login,
                         html_url: repo.owner.html_url
